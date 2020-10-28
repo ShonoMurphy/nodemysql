@@ -66,6 +66,19 @@ app.get('/addpost2', (req, res) => {
     });
 });
 
+app.get("/addpost3", (req, res) => {
+    let qtitle = req.query["title"];
+    let qbody = req.query["body"];
+
+    let post = {title: qtitle, body: qbody};
+    let sql = "INSERT INTO posts SET ?";
+    let query = db.query(sql, post, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        res.send(`Post '${qtitle}' added...`);
+    });
+});
+
 // Select posts
 app.get('/getposts', (req, res) => {
     let sql = 'SELECT * FROM posts';
