@@ -47,6 +47,16 @@ app.get('/test', (req, res) => {
     res.sendFile(__dirname + "/TestPage.html");
 });
 
+// Page to test xmlhttprequest on
+app.get('/httptest', (req, res) => {
+    res.sendFile(__dirname + "/HttpTest.html");
+})
+
+app.get('/xmladdnum/:id', (req, res) => {
+    var resp = parseInt(req.params.id) + 1;
+    res.send(resp.toString());
+})
+
 // Create table
 app.get('/createpoststable', (req, res) => {
     let sql = 'CREATE TABLE posts(id int AUTO_INCREMENT, title VARCHAR(255), body VARCHAR(255), PRIMARY KEY(id))';

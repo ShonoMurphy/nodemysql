@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+            var xmlhttp = new XMLHttpRequest();
+            var resp = 0;
+            
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState==4 && xmlhttp.status) {
+                    resp = xmlhttp.responseText;
+                    document.getElementById("NumInput").innerText = resp;
+                }
+            }
+            
+        function SendNumber() {
+            var input = document.getElementById("NumInput").innerText;
+            var target = "//localhost:3000/xmladdnum/" + input;
+            xmlhttp.open("GET", target, true);
+            xmlhttp.send();
+        }
+    </script>
+    
+</head>
+<body>
+    <button onclick="SendNumber()" style="width: 100%; height: 55px;">Send</button>
+    <p style="font-size: 500px; text-align: center; margin: 0px;" id="NumInput">0</p>
+</body>
+</html>
