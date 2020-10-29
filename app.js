@@ -29,6 +29,14 @@ app.get('/createdb', (req, res) => {
     });
 });
 
+app.get('/', (req, res) => {
+    res.redirect("/index");
+});
+
+app.get('/index', (req, res) => {
+    res.sendFile(__dirname + "/index.html")
+});
+
 // Vraag 'Hallo' op
 app.get('/hallo', (req, res) => {
     res.send("Hallo");
