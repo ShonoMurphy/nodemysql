@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    
+    <style>
+        html {
+            background: linear-gradient(to top, #FFE5E5, #F0F0FF);
+            color: #252525;
+            min-height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h2>Welcome to this default page</h2>
+    <p style="margin-bottom: 5px;">Please link any newly made pages here. Remember to put the link in the href and not a html file.</p>
+    <h6 style="margin-top: 0px;">Description optional</h6>
+    <hr>
+    <h3>Static links</h3>
+    <ul>
+        <li><a href="/Test">/TestPage.html</a> - Sample html page</li>
+        <li><a href="/Hallo">/hallo </a> - Quick test page</li>
+        <li><a href="/createpoststable">/createpoststable</a> - Create a new 'posts' table in the db</li>
+        <li><a href="/addpost1">/addpost1</a> - Add 'post number one'</li>
+        <li><a href="/addpost2">/addpost2</a> - Add 'post number two'</li>
+        <li><a href="/getposts">/getposts</a> - Get the posts and put them in the server output</li>
+    </ul>
+    <hr>
+    <h3>Variable links</h3>
+    <ul>
+        <li><a href="/addpost3?title=Testpost&amp;body=Hello"></a>/addpost3?title=Testpost&body=Hello - Adds a row in Posts with Testpost as title and Hello as body</li>
+        <li><a href="/getpost/0">/getpost/0</a> - gets the 0th(first) entry of posts</li>
+        <li><a href="/updatepost/0">/updatepost/0</a> - sets the title of the 0th(first) entry of posts to 'Updated Title'</li>
+        <li><a href="/detepost/0">/updatepost/0</a> - deletes the 0th(first) entry of posts</li>
+    </ul>
+</body>
+</html>
