@@ -34,6 +34,11 @@ app.get('/hallo', (req, res) => {
     res.send("Hallo");
 });
 
+// Return a full html page
+app.get('/test', (req, res) => {
+    res.sendFile(__dirname + "/TestPage.html");
+});
+
 // Create table
 app.get('/createpoststable', (req, res) => {
     let sql = 'CREATE TABLE posts(id int AUTO_INCREMENT, title VARCHAR(255), body VARCHAR(255), PRIMARY KEY(id))';
