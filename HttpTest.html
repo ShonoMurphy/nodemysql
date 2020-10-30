@@ -10,7 +10,7 @@
             var resp = 0;
             
             xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState==4 && xmlhttp.status) {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                     resp = xmlhttp.responseText;
                     document.getElementById("NumInput").innerText = resp;
                 }
