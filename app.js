@@ -6,7 +6,7 @@ const db = mysql.createConnection({
     host     : 'localhost',
     user     : 'phpmyadmin',
     password : 'root',
-    database : 'nodemysql'
+    database : 'felixdb'
 });
 
 // Connect
@@ -21,7 +21,7 @@ const app = express();
 
 // Create DB
 app.get('/createdb', (req, res) => {
-    let sql = 'CREATE DATABASE nodemysql';
+    let sql = 'CREATE DATABASE felixdb';
     db.query(sql, (err, result) => {
         if(err) throw err;
         console.log(result);
