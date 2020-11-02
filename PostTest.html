@@ -17,7 +17,7 @@
         function SendNumber() {
             var nameinput = document.getElementById("Namearea").value;
             var postinput = document.getElementById("Textarea").value;
-            var target = "//localhost:3000/posttest";
+            var target = "http://" + window.location.host + "/posttest";
             xmlhttp.open("POST", target, true);
             xmlhttp.setRequestHeader("Name", nameinput)
             xmlhttp.setRequestHeader("Text", postinput)
