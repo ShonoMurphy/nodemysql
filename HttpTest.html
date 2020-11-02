@@ -18,7 +18,7 @@
             
         function SendNumber() {
             var input = document.getElementById("NumInput").innerText;
-            var target = "//localhost:3000/xmladdnum/" + input;
+            var target = "http://" + window.location.host + "/xmladdnum/" + input;
             xmlhttp.open("GET", target, true);
             xmlhttp.send();
         }
