@@ -57,6 +57,18 @@ app.get('/xmladdnum/:id', (req, res) => {
     res.send(resp.toString());
 })
 
+// POST request test page
+app.get('/posttest', (req, res) => {
+    res.sendFile(__dirname + "/PostTest.html");
+});
+
+app.post('/posttest', (req, res) => {
+    let iname = req.headers["name"];
+    let itext = req.headers["text"];
+    let output = `${iname};\n\r"${itext}"`;
+    res.send(output);
+})
+
 // Create table
 app.get('/createpoststable', (req, res) => {
     let sql = 'CREATE TABLE posts(id int AUTO_INCREMENT, title VARCHAR(255), body VARCHAR(255), PRIMARY KEY(id))';

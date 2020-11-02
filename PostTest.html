@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>POST req test</title>
+    <script>
+        var xmlhttp = new XMLHttpRequest();
+            var resp = 0;
+            
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    resp = xmlhttp.responseText;
+                    alert(resp)
+                }
+            }
+            
+        function SendNumber() {
+            var nameinput = document.getElementById("Namearea").value;
+            var postinput = document.getElementById("Textarea").value;
+            var target = "//localhost:3000/posttest";
+            xmlhttp.open("POST", target, true);
+            xmlhttp.setRequestHeader("Name", nameinput)
+            xmlhttp.setRequestHeader("Text", postinput)
+            xmlhttp.send();
+        }
+    </script>
+</head>
+<body>
+    <input value="SLDKHVFSDLKJG" type="button" onclick="SendNumber()">
+    <textarea id="Namearea">POST</textarea>
+    <textarea id="Textarea">This is a test for POST protocols</textarea>
+</body>
+</html>
