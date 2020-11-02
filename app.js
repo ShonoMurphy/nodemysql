@@ -38,26 +38,13 @@ app.get('/index', (req, res) => {
 });
 
 
-
-
+//Customer pages
 app.get('/customer/', (req, res) => {
     res.redirect('/customer/index')
 });
 app.get('/customer/index', (req, res) => {
     res.sendFile(__dirname + "/customer/Index.html");
 });
-
-
-
-
-
-
-
-
-
-
-    
-
 
 
 //Test pages
