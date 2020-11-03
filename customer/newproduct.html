@@ -2,9 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>New User</title>
+    <title>New Product</title>
+    
+    <style>
+        html {
+            background: linear-gradient(to top, #dda0e5, #ccb0ff);
+            color: #252525;
+            min-height: 100%;
+        }
+        
+        body * {
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    WIP
+    <form action="newcustomer" method="POST" target="resframe">
+        <label for="name">Name:</label>
+        <input type="text" name="name" required/> <br />
+        <label for="sku">SKU:</label>
+        <input type="text" name="sku" required/> <br />
+        <label for="price">Price</label>
+        <input type="text" name="price" required/> <br />
+        <input type="submit" value="Submit">
+    </form>
+    <iframe name="resframe"/>
 </body>
 </html>
