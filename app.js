@@ -91,8 +91,9 @@ app.post('/customer/newproduct', (req, res) => {
     iprice = Number(iprice.replace(",", "."));
 
     var patt = /^[a-zA-Z0-9 ]+$/; //only numbers and letters
+    var iskupatt = /^[a-zA-Z0-9 -]+$/; //only numbers and letters
     var numpatt = /^[0-9. ]+$/; //only numbers or .
-    if (!patt.test(iname) || !patt.test(isku))
+    if (!patt.test(iname) || !iskupatt.test(isku))
     {
         res.send("Invalid name or sku, please make sure your input only contains alphanumeric symbols.");
         return;
