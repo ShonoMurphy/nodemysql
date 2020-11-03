@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Product</title>
+    
+    <style>
+        html {
+            background: linear-gradient(to top, #dda0e5, #ccb0ff);
+            color: #252525;
+            min-height: 100%;
+        }
+        
+        body * {
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            display: block;
+        }
+        red {
+            color:red;
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <form action="newproduct" method="POST" target="resframe">
+        <h1>Create a customer</h1>
+        <a style="padding-bottom: 10px;" href="index">Go back</a>
+        <label for="name">Name: <red>*</red></label>
+        <input type="text" name="name" required/> <br />
+        <label for="sku">SKU: <red>*</red></label>
+        <input type="text" name="sku" required/> <br />
+        <label for="price">Price: <red>*</red></label>
+        <input type="text" name="price" required/> <br />
+        <input type="submit" value="Submit">
+    </form>
+    <iframe name="resframe"/>
+</body>
+</html>
