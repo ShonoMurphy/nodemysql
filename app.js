@@ -47,6 +47,58 @@ app.get('/customer/index', (req, res) => {
 });
 
 
+
+app.get('/customer/newcustomer', (req, res) => {
+    res.sendFile(__dirname + "/customer/newcustomer.html")
+})
+app.post('/customer/newcustomer', (req, res) => {
+    let iname = req.headers["name"];
+    let iemail = req.headers["email"];
+    let iadress = req.headers["adress"];
+    
+    //Validate the input, we only accept alphanumeric symbols besides @ and ., otherwise the user can input funky stuff... D:
+    var patt = /^[a-z0-9@.]+$/;
+    if (!patt.test(iname) || !patt.test(iemail) || !patt.test(iadress))
+    {
+        //We found something else that we didn't want, so we let the user know and tell them to fix it.
+        res.send("Invalid input, please make sure your input only contains @, . or alphanumeric symbols.");
+        return;
+    }
+
+    let sql = `INSERT INTO customers (name, email, adress) VALUES (${iname}, ${iemail}, ${iadress})`;
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(`Success! ${iname} has been added to the userlist.`)
+    });
+})
+
+//this should probably be about the same as newcustomer, with only the input and table being different
+app.get('/customer/newproduct', (req, res) => {
+    res.sendFile(__dirname + "/customer/newproduct.html")
+})
+app.post('/customer/newproduct', (req, res) => {
+    let iname = req.headers["name"];
+    let idescription = req.headers["description"];
+    
+    //Validate the input, we only accept alphanumeric symbols, otherwise the user can input funky stuff... D:
+    var patt = /^[a-z0-9]+$/;
+    if (!patt.test(iname) || !patt.test(idescription))
+    {
+        //We found something else that we didn't want, so we let the user know and tell them to fix it.
+        res.send("Invalid input, please make sure your input only contains alphanumeric symbols.");
+        return;
+    }
+
+    let sql = `INSERT INTO products (name, description) VALUES (${iname}, ${idescription})`;
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(`Success! ${iname} has been added to the userlist.`)
+    });
+})
+
+
+
+
 //Test pages
 
 // Vraag 'Hallo' op
