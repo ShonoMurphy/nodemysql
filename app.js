@@ -64,7 +64,7 @@ app.post('/customer/newcustomer', (req, res) => {
     let iadress = req.body["adress"];
     
     //Validate the input, we only accept alphanumeric symbols besides @ and ., and must contain something, otherwise the user can input funky stuff... D:
-    var patt = /^[a-z0-9@. ]+$/;
+    var patt = /^[a-zA-Z0-9@. ]+$/;
     if (!patt.test(iname) || !patt.test(iemail) || !patt.test(iadress))
     {
         console.log("Uh oh!")
@@ -74,7 +74,6 @@ app.post('/customer/newcustomer', (req, res) => {
     }
 
     let sql = `INSERT INTO customer (customer_name, email, address) VALUES ('${iname}', '${iemail}', '${iadress}')`;
-    console.log(sql)
     db.query(sql, (err, result) => {
         if (err) throw err;
         res.send(`Success! ${iname} has been added to the userlist.`)
@@ -91,9 +90,10 @@ app.post('/customer/newproduct', (req, res) => {
     let iprice = req.body["price"];
     iprice = Number(iprice.replace(",", "."));
 
-    var patt = /^[a-z0-9 ]+$/; //only numbers and letters
+    var patt = /^[a-zA-Z0-9 ]+$/; //only numbers and letters
+    var iskupatt = /^[a-zA-Z0-9 -]+$/; //only numbers and letters
     var numpatt = /^[0-9. ]+$/; //only numbers or .
-    if (!patt.test(iname) || !patt.test(isku))
+    if (!patt.test(iname) || !iskupatt.test(isku))
     {
         res.send("Invalid name or sku, please make sure your input only contains alphanumeric symbols.");
         return;
