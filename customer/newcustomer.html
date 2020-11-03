@@ -17,15 +17,21 @@
             width: 50%;
             display: block;
         }
+        red {
+            color:red;
+            display: inline;
+        }
     </style>
 </head>
 <body>
     <form action="newcustomer" method="POST" target="resframe">
-        <label for="name">Name:</label>
+        <h1>Create a customer</h1>
+        <a style="padding-bottom: 10px;" href="index">Go back</a>
+        <label for="name">Name: <red>*</red></label>
         <input type="text" name="name" required/><br />
-        <label for="email">Email:</label>
+        <label for="email">Email: <red>*</red></label>
         <input type="text" name="email" required/><br />
-        <label for="adress">Adress</label>
+        <label for="adress">Address: <red>*</red></label>
         <input type="text" name="adress" required/><br />
         <input type="submit" value="Submit">
     </form>

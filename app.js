@@ -34,6 +34,8 @@ app.get('/createdb', (req, res) => {
     });
 });
 
+
+
 app.get('/', (req, res) => {
     res.redirect("/index");
 });
@@ -62,7 +64,7 @@ app.post('/customer/newcustomer', (req, res) => {
     let iadress = req.body["adress"];
     
     //Validate the input, we only accept alphanumeric symbols besides @ and ., and must contain something, otherwise the user can input funky stuff... D:
-    var patt = /^[a-z0-9@.]+$/;
+    var patt = /^[a-z0-9@. ]+$/;
     if (!patt.test(iname) || !patt.test(iemail) || !patt.test(iadress))
     {
         console.log("Uh oh!")
@@ -71,7 +73,8 @@ app.post('/customer/newcustomer', (req, res) => {
         return;
     }
 
-    let sql = `INSERT INTO customers (name, email, adress) VALUES (${iname}, ${iemail}, ${iadress})`;
+    let sql = `INSERT INTO customer (customer_name, email, address) VALUES ('${iname}', '${iemail}', '${iadress}')`;
+    console.log(sql)
     db.query(sql, (err, result) => {
         if (err) throw err;
         res.send(`Success! ${iname} has been added to the userlist.`)
@@ -86,17 +89,21 @@ app.post('/customer/newproduct', (req, res) => {
     let iname = req.body["name"];
     let isku = req.body["sku"];
     let iprice = req.body["price"];
-    iprice = Number(iprice.replace(",", ","));
-    
-    var patt = /^[a-z0-9]+$/; //only numbers and letters
-    var numpatt = /^[0-9.]+$/; //only numbers or .
-    if (!patt.test(iname) || !patt.test(idescription) || !numpatt.test(iprice))
+    iprice = Number(iprice.replace(",", "."));
+
+    var patt = /^[a-z0-9 ]+$/; //only numbers and letters
+    var numpatt = /^[0-9. ]+$/; //only numbers or .
+    if (!patt.test(iname) || !patt.test(isku))
     {
-        res.send("Invalid input, please make sure your input only contains alphanumeric symbols.");
+        res.send("Invalid name or sku, please make sure your input only contains alphanumeric symbols.");
         return;
     }
+    else if (!numpatt)
+    {
+        res.send("Invalid price, please only enter a numeric price.")
+    }
 
-    let sql = `INSERT INTO products (name, sku, price) VALUES (${iname}, ${isku}, ${iprice})`;
+    let sql = `INSERT INTO product (product_name, sku, unit_price) VALUES ('${iname}', '${isku}', '${iprice}')`;
     db.query(sql, (err, result) => {
         if (err) throw err;
         res.send(`Success! ${iname} has been added to the userlist.`)
