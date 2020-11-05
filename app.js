@@ -110,8 +110,30 @@ app.post('/customer/newproduct', (req, res) => {
     });
 });
 
+app.get('/customer/listcustomer', (req, res) => {
+    res.sendFile(__dirname + "/customer/listcustomer.html")
+});
 
 
+// Standard GETs
+
+// Select table
+app.get('/get/:table', (req, res) => {
+    let sql = `SELECT * FROM ${req.params.table}`;
+    let query = db.query(sql, (err, results) => {
+        if(err) throw err;
+        res.send(results);
+    });
+});
+
+// Select single post
+app.get('/get/:table/:id', (req, res) => {
+    let sql = `SELECT * FROM ${req.params.table} WHERE ${req.params.table}id = ${req.params.id}`;
+    let query = db.query(sql, (err, result) => {
+        if(err) throw err;
+        res.send(result);
+    });
+});
 
 //Test pages
 
