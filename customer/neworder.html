@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        html {
+            background: linear-gradient(to top right, #E5BFa0, #FFB0A0);
+            color: #252525;
+            min-height: 100%;
+        }
+        
+        body * {
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            display: block;
+        }
+        red {
+            color:red;
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <form action="neworder" method="POST" target="resframe">
+        <h1>Create an order</h1>
+        <a style="padding-bottom: 10px;" href="index">Go back</a>
+        <label for="customer">customer: <red>*</red></label>
+        <select name="customer">
+            $CUSTOMER
+        </select>
+        <label for="datetime">Date: <red>*</red></label>
+        <input type="datetime" name="date" required>
+        <label for="id">ID: <red>*</red></label>
+        <input type="number" name="id" required>
+        <input type="submit" value="Submit">
+    </form>
+    <iframe name="resframe"></iframe>
+</body>
+</html>
