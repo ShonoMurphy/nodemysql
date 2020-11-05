@@ -64,7 +64,7 @@ app.post('/customer/newcustomer', (req, res) => {
     let iadress = req.body["adress"];
     
     //Validate the input, we only accept alphanumeric symbols besides @ and ., and must contain something, otherwise the user can input funky stuff... D:
-    var patt = /^[a-zA-Z0-9@. ]+$/;
+    var patt = /^[a-zA-Z0-9@., ]+$/;
     if (!patt.test(iname) || !patt.test(iemail) || !patt.test(iadress))
     {
         console.log("Uh oh!")
@@ -79,6 +79,30 @@ app.post('/customer/newcustomer', (req, res) => {
         res.send(`Success! ${iname} has been added to the userlist.`)
     });
 });
+
+// edit customers information
+
+
+db.connect(function(err) {
+    //if (err) throw err;
+    //Select all customers and return the result object:
+    db.query("SELECT * FROM customer", function (err, result) {
+      if (err) throw err;
+      console.log(result);
+    });
+});
+
+getData = () => { 
+    return new Promise((resolve, reject)=>{ 
+        db.query('SELECT * FROM names',(err, rows)=>{ resolve(rows);})
+    })
+}
+app.get('/abc',(req,res)=>{ getData().then((results)=>{let html = '';for(let x in results)html+= results[x].kapitein+"<br>"; res.end(html)})});
+
+
+
+
+
 
 //this should probably be about the same as newcustomer, with only the input, regex and table being different
 app.get('/customer/newproduct', (req, res) => {
@@ -257,4 +281,3 @@ app.listen('3000', () => {
     console.log('Server started on port 3000');
 });
 
-//thierry

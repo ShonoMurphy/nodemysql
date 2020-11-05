@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Customer</title>
+    <style>
+        html {
+            background: linear-gradient(to top right, #BFE5a0, #F0FFB0);
+            color: #252525;
+            min-height: 100%;
+        }
+        main {
+            text-align: center;
+            width: 50%;
+            margin: 50px auto;
+        }
+        table {
+            margin: 50px auto;
+        }
+        table, th, td {
+            border-collapse: collapse;
+            border: 1px solid #000;
+        }
+        th {
+            padding: 5px;
+        } 
+    </style>
+</head>
+<body>
+    <main>
+        <table id="table">
+            <thead>
+                <th>ID</th>
+                <th>Name</th>
+                <th>email</th>
+                <th>adress</th>
+                <th>Edit</th>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </main>
+</body>
+<script src="../app.js"></script>
+<script>
+
+
+
+    function loadHTMLTable(data) {
+        const table = document.querySelector('table tbody');
+        
+        console.log(data);
+
+        if (data.length === 0) {
+            table.innerHTML = "<tr><td class='no-data' colspan='5'>No Data</td></tr>";
+            return;
+        }
+        let tableHtml = "";
+
+        data.forEach(function({id, customer_name, email, adress}) {
+            tableHtml += "<tr>";
+            tableHtml += `<td>${id}</td>`;
+            tableHtml += `<td>${customer_name}</td>`;
+            tableHtml += `<td>${email}</td>`;
+            tableHtml += `<td>${adress}</td>`;
+            tableHtml += `<td><button class="edit-row-btn" data-id=${id}>Edit</button></td>`;
+            tableHtml += "</tr>";
+        });
+
+        table.innerHTML = tableHtml;
+    }
+</script>
+</html>
