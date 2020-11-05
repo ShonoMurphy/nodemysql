@@ -72,67 +72,6 @@ app.get('/abc',(req,res)=>{ getData().then((results)=>{let html = '';for(let x i
 
 
 
-
-// Standard GETs
-
-// Select table
-app.get('/get/:table', (req, res) => {
-    let sql = `SELECT * FROM ${req.params.table}`;
-    let query = db.query(sql, (err, results) => {
-        if(err) throw err;
-        res.send(results);
-    });
-});
-
-// Select single post
-app.get('/get/:table/:id', (req, res) => {
-    let sql = `SELECT * FROM ${req.params.table} WHERE ${req.params.table}id = ${req.params.id}`;
-    let query = db.query(sql, (err, result) => {
-        if(err) throw err;
-        res.send(result);
-    });
-});
-
-
-// Select posts
-app.get('/getposts', (req, res) => {
-    let sql = 'SELECT * FROM posts';
-    let query = db.query(sql, (err, results) => {
-        if(err) throw err;
-        console.log(results);
-        res.send('Posts fetched');
-    });
-});
-
-// Select single post
-app.get('/getpost/:id', (req, res) => {
-    let sql = `SELECT * FROM posts WHERE id = ${req.params.id}`;
-    let query = db.query(sql, (err, results) => {
-        if(err) throw err;
-        res.send(results);
-    });
-});
-
-// Update post
-app.get('/updatepost/:id/', (req, res) => {
-    let newTitle = 'Updated Title';
-    let sql = `UPDATE posts SET title = '${newTitle}'  WHERE id = ${req.params.id}`;
-    let query = db.query(sql, (err, results) => {
-        if(err) throw err;
-        res.send('Post updated...');
-    });
-});
-
-// Delete post
-app.get('/deletepost/:id/', (req, res) => {
-    let sql = `DELETE FROM posts WHERE id = ${req.params.id}`;
-    let query = db.query(sql, (err, results) => {
-        if(err) throw err;
-        res.send('Post deleted...');
-    });
-});
-
-
 app.listen('3000', () => {
     console.log('Server started on port 3000');
 });
