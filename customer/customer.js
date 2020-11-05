@@ -29,4 +29,8 @@ function customer()
             });
         });
     });
+    
+    app.post('/customer/neworder', (req, res) => {
+        //Add code for the new order submit button here
+    });
 }
