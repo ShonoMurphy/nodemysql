@@ -19,6 +19,11 @@ db.connect((err) => {
 
 const app = express();
 
+module.exports = { app, db }
+
+const customer = require('./customer/customer.js').customer;
+customer();
+
 //middleware for parsing http requests
 var bodyparser = require('body-parser');
 app.use(bodyparser.json());
@@ -158,6 +163,7 @@ app.get('/get/:table/:id', (req, res) => {
         res.send(result);
     });
 });
+
 
 //Test pages
 
