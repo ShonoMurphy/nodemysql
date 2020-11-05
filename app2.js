@@ -80,7 +80,7 @@ app.get('/get/:table', (req, res) => {
 
 // Select single post
 app.get('/get/:table/:id', (req, res) => {
-    let sql = `SELECT * FROM ${req.params.table} WHERE id = ${req.params.id}`;
+    let sql = `SELECT * FROM ${req.params.table} WHERE ${req.params.table}id = ${req.params.id}`;
     let query = db.query(sql, (err, result) => {
         if(err) throw err;
         res.send(result);
@@ -89,7 +89,7 @@ app.get('/get/:table/:id', (req, res) => {
 
 // Delete post
 app.get('/delete/:table/:id/', (req, res) => {
-    let sql = `DELETE FROM ${req.params.table} WHERE id = ${req.params.id}`;
+    let sql = `DELETE FROM ${req.params.table} WHERE ${req.params.table}id = ${req.params.id}`;
     let query = db.query(sql, (err, results) => {
         if(err) throw err;
         res.send('Post deleted...');

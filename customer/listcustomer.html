@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Customers</title>
+</head>
+<style>
+
+</style>
+<script>
+    function getFunction() {
+        var input  = document.getElementById("input1").value;
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+                var myObj = JSON.parse(this.responseText);
+                console.log(myObj);
+                document.getElementById("demo").innerHTML = myObj[0].email;
+            }
+        };
+        xmlhttp.open("GET", "http://" + window.location.host + "/get/customer/" + input, true);
+        xmlhttp.send();
+    } 
+
+</script>
+<body>
+    <div>
+        <input type="text" id="input1" >
+        <button id="btn" onclick="getFunction()">Go</button>
+        <p id=demo></p>
+    </div>
+</body>
+</html>
