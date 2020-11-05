@@ -69,7 +69,7 @@ app.post('/customer/newcustomer', (req, res) => {
     {
         console.log("Uh oh!")
         //We found something else that we didn't want, so we let the user know and tell them to fix it.
-        res.send("Invalid input, please make sure your input only contains @, . or alphanumeric symbols.");
+        res.send("Invalid input, please make sure your input only contains @ , . or alphanumeric symbols.");
         return;
     }
 
@@ -82,27 +82,32 @@ app.post('/customer/newcustomer', (req, res) => {
 
 // edit customers information
 
+app.get('/customer/editcustomer', (req, res) => {
+    res.sendFile(__dirname + "/customer/editcustomer.html")
+});
 
-db.connect(function(err) {
-    //if (err) throw err;
-    //Select all customers and return the result object:
-    db.query("SELECT * FROM customer", function (err, result) {
-      if (err) throw err;
-      console.log(result);
+app.put('/put/customer/:id/', (req, res) => {
+    let newName = req.headers["customer_name"];
+    let newEmail = req.headers["customer_name"];
+    let newAddress = req.headers["customer_name"];
+    let sql = `UPDATE customer SET customer_name = '${newName}', email = '${newEmail}', address = '${newAddress}'  WHERE customerID = ${req.params.id}`;
+    let query = db.query(sql, (err, results) => {
+        if(err) throw err;
+        console.log('Post updated...');
     });
 });
 
-getData = () => { 
-    return new Promise((resolve, reject)=>{ 
-        db.query('SELECT * FROM names',(err, rows)=>{ resolve(rows);})
-    })
-}
-app.get('/abc',(req,res)=>{ getData().then((results)=>{let html = '';for(let x in results)html+= results[x].kapitein+"<br>"; res.end(html)})});
+/*app.patch('/patch/editcustomer', (request, response) => {
+    updcus = () => { return new Promise((resolve, reject) => {
+        const query = "UPDATE customer SET customer_name = ? WHERE id = ?";
 
-
-
-
-
+        connection.query(query, [name, id] ,  (err, results) => {
+            if(err) reject(new Error(err.message));
+            resolve(results.affectedRows);
+            })
+        });
+    }
+})*/
 
 //this should probably be about the same as newcustomer, with only the input, regex and table being different
 app.get('/customer/newproduct', (req, res) => {

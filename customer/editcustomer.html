@@ -24,7 +24,11 @@
         }
         th {
             padding: 5px;
+            width: auto;
         } 
+        td {
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -33,41 +37,111 @@
             <thead>
                 <th>ID</th>
                 <th>Name</th>
-                <th>email</th>
-                <th>adress</th>
+                <th>Email</th>
+                <th>Address</th>
                 <th>Edit</th>
             </thead>
             <tbody></tbody>
         </table>
+        <section hidden id="update-row">
+            <label>Name:</label>
+            <input type="text" id="update-name-input">
+            <label>Email:</label>
+            <input type="text" id="update-email-input">
+            <label>Address:</label>
+            <input type="text" id="update-address-input">
+            <button id="update-row-btn" onclick="updatedInfo()">Update</button>
+        </section>
     </main>
 </body>
-<script src="../app.js"></script>
+
 <script>
 
+var obj = [];
 
-
-    function loadHTMLTable(data) {
-        const table = document.querySelector('table tbody');
-        
-        console.log(data);
-
-        if (data.length === 0) {
-            table.innerHTML = "<tr><td class='no-data' colspan='5'>No Data</td></tr>";
-            return;
+window.addEventListener('load', () => {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function (){
+        if (this.readyState == 4 && this.status == 200) {
+            obj = JSON.parse(this.responseText);
+            //console.log(this.responseText);
+            //console.log('hier ben ik');
+            insertTable();
         }
-        let tableHtml = "";
+    };
+    //console.log("als eerste of als tweede");
+    xhr.open("GET","http://" + window.location.host + "/get/customer/", true);
+    xhr.send(); 
+})
 
-        data.forEach(function({id, customer_name, email, adress}) {
-            tableHtml += "<tr>";
-            tableHtml += `<td>${id}</td>`;
-            tableHtml += `<td>${customer_name}</td>`;
-            tableHtml += `<td>${email}</td>`;
-            tableHtml += `<td>${adress}</td>`;
-            tableHtml += `<td><button class="edit-row-btn" data-id=${id}>Edit</button></td>`;
-            tableHtml += "</tr>";
-        });
 
-        table.innerHTML = tableHtml;
+
+function insertTable() {
+    const table = document.querySelector('table tbody');
+
+    if (obj.length === 0) {
+        table.innerHTML = "<tr><td class='no-data' colspan='5'>No Data</td></tr>";
+        return;
     }
+    let tableHtml = "";
+
+    obj.forEach(function({customerID, customer_name, email, address}) {
+        tableHtml += "<tr>";
+        tableHtml += `<td>${customerID}</td>`;
+        tableHtml += `<td>${customer_name}</td>`;
+        tableHtml += `<td>${email}</td>`;
+        tableHtml += `<td>${address}</td>`;
+        tableHtml += `<td><button class="edit-button" onClick="editBtn()" data-id=${customerID}>Edit</button></td>`;
+        tableHtml += "</tr>";
+    });
+    table.innerHTML = tableHtml;
+}
+
+
+
+document.querySelector('table tbody').addEventListener('click', function(event) {
+    //console.log(event.target);
+    if (event.target.className === "edit-button") {
+        editBtn(event.target.dataset.id);
+    }
+});
+
+function editBtn(id){
+    console.log(id);
+    console.log(obj);
+    document.querySelector('#update-name-input').value = obj.find(x => x.customerID === "'"+id+"'").customer_name;
+    document.querySelector('#update-email-input').value;
+    document.querySelector('#update-address-input').value;
+    const updateSection = document.querySelector('#update-row');
+    updateSection.hidden = false;
+    document.querySelector('#update-name-input').dataset.id = id;
+}
+
+var xmlhttp = new XMLHttpRequest();
+            var resp = 0;
+            
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    resp = xmlhttp.responseText;
+                    alert(resp)
+                }        
+            }
+            
+function updatedInfo() {
+            var nameinput = document.querySelector('#update-name-input').value;
+            var emailinput = document.querySelector('#update-email-input').value;
+            var addressinput = document.querySelector('#update-address-input').value;
+            var custId = document.querySelector('#update-name-input').dataset.id;
+            console.log(nameinput+custId);
+            var target = "http://" + window.location.host + "/put/customer/"+custId;
+            xmlhttp.open("PUT", target, true);
+            xmlhttp.setRequestHeader("customer_name", nameinput)
+            xmlhttp.setRequestHeader("email", emailinput)
+            xmlhttp.setRequestHeader("address", addressinput)
+            xmlhttp.send();
+}
+
+
+
 </script>
 </html>
