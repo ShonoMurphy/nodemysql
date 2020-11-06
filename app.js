@@ -19,6 +19,11 @@ db.connect((err) => {
 
 const app = express();
 
+//middleware for parsing http requests
+var bodyparser = require('body-parser');
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({ extended: true }));
+
 module.exports = { app, db }
 
 const customer = require('./customer/customer.js').customer;
@@ -26,11 +31,6 @@ customer();
 
 const testpages = require('./testpages.js').testpages;
 testpages();
-
-//middleware for parsing http requests
-var bodyparser = require('body-parser');
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended: true }));
 
 // Create DB
 app.get('/createdb', (req, res) => {
