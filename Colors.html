@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        * {
+            text-shadow: white 2px 2px 2px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-areas: 'header header header header'
+                'menu main main right'
+                'menu main main right'
+                'footer footer footer footer';
+            gap: 10px;
+        }
+
+        .container>div {
+            padding: 20px 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .container {
+            min-height: 100%;
+        }
+
+        .gridmain {
+            grid-area: main;
+            display: flex;
+            align-items: center;
+        }
+
+        .gridmain>* {
+            margin: auto;
+        }
+
+        button {
+            height: 40px;
+            text-shadow: none;
+        }
+    </style>
+
+    <script>
+        var xmlhttp = new XMLHttpRequest();
+        var resp = 0;
+
+        var colname = 'White';
+        var colrgb = '255, 255, 255';
+        var colhsl = '0, 100, 0';
+        var colhex = '#FFFFFF';
+
+        function Checkload() {
+            if (localStorage.getItem('colload')) {
+                LoadColor();
+                document.getElementById('loadcheck').checked = true;
+            }
+            else document.getElementById('loadcheck').checked = false;
+        }
+
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+
+                resp = JSON.parse(xmlhttp.responseText);
+                color = resp[Math.floor((Math.random() * resp.length))];
+
+                colname = color.name; colrgb = color.rgb; colhsl = color.hsl; colhex = color.hex;
+
+                SetColor();
+            }
+        }
+
+        function SetColor() {
+            document.getElementsByTagName("body")[0].style.backgroundColor = `rgb(${colrgb})`;
+            document.getElementById("colorname").innerText = `Your current color is: ${colname}`
+            document.getElementById("rgb").innerText = `RGB: ${colrgb}`
+            document.getElementById("hsl").innerText = `HSL: ${colhsl}`
+            document.getElementById("hex").innerText = `HEX: ${colhex}`
+        }
+
+        function GetColor() {
+            var target = "http://" + window.location.host + "/colors";
+            xmlhttp.open("GET", target, true);
+            xmlhttp.send();
+        }
+
+        function SaveColor() {
+            localStorage.setItem('colname', colname)
+            localStorage.setItem('colrgb', colrgb)
+            localStorage.setItem('colhsl', colhsl)
+            localStorage.setItem('colhex', colhex)
+            document.getElementById('resph').innerText = "Color saved!"
+        }
+
+        function LoadColor() {
+            colname = localStorage.getItem('colname');
+            colrgb = localStorage.getItem('colrgb');
+            colhsl = localStorage.getItem('colhsl');
+            colhex = localStorage.getItem('colhex');
+            SetColor();
+            document.getElementById('resph').innerText = "Color loaded!"
+        }
+
+        function DeleteColor() {
+            localStorage.removeItem('colname');
+            localStorage.removeItem('colrgb');
+            localStorage.removeItem('colhsl');
+            localStorage.removeItem('colhex');
+            document.getElementById('resph').innerText = "Color removed from data!"
+        }
+
+        function ChangeSetting(checkbox) {
+            if (checkbox.checked) {
+                if (localStorage.getItem('colname')) {
+                    localStorage.setItem('colload', true);
+                }
+                else {
+                    document.getElementById('resph').innerText = "Please save a color first";
+                    checkbox.checked = false;
+                }
+            }
+            else localStorage.removeItem('colload');
+        }
+
+    </script>
+</head>
+
+<body onload="Checkload()" id="test" style="background-color: white;">
+    <div class="container">
+        <div style="grid-area:header; text-align: center;">
+            <h1 id="colorname">Your current color is: white</h1>
+            <br>
+            <h4 id="rgb">RGB: 255, 255, 255</h4>
+            <h4 id="hsl">HSL: 0, 100, 0</h4>
+            <h4 id="hex">HEX: #FFFFFF</h4>
+            <br>
+            <input type="checkbox" id="loadcheck" onchange="ChangeSetting(this)"> Load favourite color on load
+        </div>
+        <div class="gridmain">
+            <button onclick="GetColor()">Give me a new color!</button>
+            <button onclick="SaveColor()">Save this as my favourite</button>
+            <button onclick="LoadColor()">Gimme my favourite</button>
+            <button onclick="DeleteColor()">Delete my favourite</button>
+        </div>
+        <div style="grid-area: footer; text-align: center;">
+            <h1 id="resph"> </h1>
+        </div>
+    </div>
+</body>
+
+</html>
