@@ -29,6 +29,9 @@
         td {
             padding: 5px;
         }
+        .updateInfoBox{
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -45,11 +48,11 @@
         </table>
         <section hidden id="update-row">
             <label>Name:</label>
-            <input type="text" id="update-name-input">
+            <input class="updateInfoBox" type="text" id="update-name-input">
             <label>Email:</label>
-            <input type="text" id="update-email-input">
+            <input class="updateInfoBox" type="text" id="update-email-input">
             <label>Address:</label>
-            <input type="text" id="update-address-input">
+            <input class="updateInfoBox" type="text" id="update-address-input">
             <button id="update-row-btn" onclick="updatedInfo()">Update</button>
         </section>
     </main>
@@ -91,7 +94,7 @@ function insertTable() {
         tableHtml += `<td>${customer_name}</td>`;
         tableHtml += `<td>${email}</td>`;
         tableHtml += `<td>${address}</td>`;
-        tableHtml += `<td><button class="edit-button" onClick="editBtn()" data-id=${customerID}>Edit</button></td>`;
+        tableHtml += `<td><button class="edit-button" onClick="editBtn(${customerID})" data-id=${customerID}>Edit</button></td>`;
         tableHtml += "</tr>";
     });
     table.innerHTML = tableHtml;
@@ -107,11 +110,9 @@ document.querySelector('table tbody').addEventListener('click', function(event) 
 });
 
 function editBtn(id){
-    console.log(id);
-    console.log(obj);
-    document.querySelector('#update-name-input').value = obj.find(x => x.customerID === "'"+id+"'").customer_name;
-    document.querySelector('#update-email-input').value;
-    document.querySelector('#update-address-input').value;
+    document.querySelector('#update-name-input').value = obj.find(x => x.customerID == id).customer_name;
+    document.querySelector('#update-email-input').value = obj.find(x => x.customerID == id).email;
+    document.querySelector('#update-address-input').value = obj.find(x => x.customerID == id).address;
     const updateSection = document.querySelector('#update-row');
     updateSection.hidden = false;
     document.querySelector('#update-name-input').dataset.id = id;
@@ -139,6 +140,7 @@ function updatedInfo() {
             xmlhttp.setRequestHeader("email", emailinput)
             xmlhttp.setRequestHeader("address", addressinput)
             xmlhttp.send();
+            location.reload();
 }
 
 

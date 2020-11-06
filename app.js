@@ -88,8 +88,8 @@ app.get('/customer/editcustomer', (req, res) => {
 
 app.put('/put/customer/:id/', (req, res) => {
     let newName = req.headers["customer_name"];
-    let newEmail = req.headers["customer_name"];
-    let newAddress = req.headers["customer_name"];
+    let newEmail = req.headers["email"];
+    let newAddress = req.headers["address"];
     let sql = `UPDATE customer SET customer_name = '${newName}', email = '${newEmail}', address = '${newAddress}'  WHERE customerID = ${req.params.id}`;
     let query = db.query(sql, (err, results) => {
         if(err) throw err;
@@ -97,17 +97,6 @@ app.put('/put/customer/:id/', (req, res) => {
     });
 });
 
-/*app.patch('/patch/editcustomer', (request, response) => {
-    updcus = () => { return new Promise((resolve, reject) => {
-        const query = "UPDATE customer SET customer_name = ? WHERE id = ?";
-
-        connection.query(query, [name, id] ,  (err, results) => {
-            if(err) reject(new Error(err.message));
-            resolve(results.affectedRows);
-            })
-        });
-    }
-})*/
 
 //this should probably be about the same as newcustomer, with only the input, regex and table being different
 app.get('/customer/newproduct', (req, res) => {
@@ -197,6 +186,14 @@ app.post('/posttest', (req, res) => {
     let output = `${iname};\n\r"${itext}"`;
     res.send(output);
 })
+
+// POST image test
+
+
+
+
+
+
 
 // Create table
 app.get('/createpoststable', (req, res) => {
