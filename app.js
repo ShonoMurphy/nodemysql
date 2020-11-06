@@ -53,24 +53,6 @@ app.get('/index', (req, res) => {
 });
 
 
-// edit customers information
-
-app.get('/customer/editcustomer', (req, res) => {
-    res.sendFile(__dirname + "/customer/editcustomer.html")
-});
-
-app.put('/put/customer/:id/', (req, res) => {
-    let newName = req.headers["customer_name"];
-    let newEmail = req.headers["email"];
-    let newAddress = req.headers["address"];
-    let sql = `UPDATE customer SET customer_name = '${newName}', email = '${newEmail}', address = '${newAddress}'  WHERE customerID = ${req.params.id}`;
-    let query = db.query(sql, (err, results) => {
-        if(err) throw err;
-        console.log('Post updated...');
-    });
-});
-
-
 app.listen('3000', () => {
     console.log('Server started on port 3000');
 });
