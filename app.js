@@ -53,23 +53,6 @@ app.get('/createdb', (req, res) => {
     });
 });
 
-app.get('get/recipes', (req, res) => {
-    let sql = 'SELECT * FROM recipes'
-    db.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
-});
-
-app.get('/get/recipes/:id', (req, res) => {
-    let sql = `SELECT * FROM recipes WHERE id = ${req.params.id}`;
-    console.log(req.params.id)
-    let query = db.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
-});
-
 app.get('/', (req, res) => {
     res.redirect("/index");
 });
@@ -121,6 +104,45 @@ app.get('/createcolorstable', (req, res) => {
     });
 });
 
+
+app.get('/recipes/:id?', (req, res) => {
+    let sql = 'SELECT * FROM recipes';
+    let id = Number(req.params.id);
+    
+    if (id != null && id != undefined && id != "" && !isNaN(id) && id >= 0)
+        sql += ` WHERE id = ${req.params.id}`;
+
+    db.query(sql, (err, result) => {
+        if (err) { catchException(err, req, res); return; }
+        res.send(result);
+    });
+});
+
+app.post('/recipes/', (req, res) => {
+    let rname = "";
+    let rpreptime = "";
+    let rportsize = "";
+
+    if (req.headers['recipe_name'])
+    {
+        rname = req.headers['recipe_name'];
+        rpreptime = req.headers['prep_time'];
+        rportsize = req.headers['portion_size'];
+    }
+    else if (req.body['recipe_name'])
+    {
+        rname = req.body['recipe_name'];
+        rpreptime = req.body['prep_time'];
+        rportsize = req.body['portion_size'];
+    }
+    else { res.sendStatus(400); return;}
+
+    let sql = `INSERT INTO recipes (recipe_name, prep_time, portion_size) VALUES ('${rname}', ${rpreptime}, '${rportsize}')`
+    db.query(sql, (err, result) => {
+        if (err) { catchException(err, req, res); return; }
+        res.sendStatus(200);
+    });
+});
 
 app.listen('3000', () => {
     console.log('Server started on port 3000');
