@@ -149,7 +149,7 @@ function customer()
     });
 
     //get all products
-    app.post('get/product', (req, res) => {
+    app.get('get/product', (req, res) => {
         let sql = 'SELECT * FROM product'
         db.query(sql, (err, result) => {
             if (err) throw err;
