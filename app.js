@@ -56,12 +56,18 @@ app.get('/index', (req, res) => {
 app.get('/colorpage/', (req, res) => {
     res.sendFile(__dirname + "/Colors.html");
 });
+
+//color api
 app.get('/colors/:name?', (req, res) => {
+    //get all the colors from the db
     let sql = 'SELECT * FROM colors'
     db.query(sql, (err, result) => {
         if (err) throw err;
+        
+        //if the user entered a color name
         if (req.params.name)
         {
+            //filter through all the colors to get the ones whose name contains the entered name
             var filteredres = new Array();
             result.forEach(color => {
                 colorname = color.name.toLowerCase();
@@ -70,8 +76,12 @@ app.get('/colors/:name?', (req, res) => {
                     filteredres.push(color);
                 }
             });
+            
+            //send this filtered list
             res.send(filteredres);
         }
+        
+        //otherwise just send everything
         else res.send(result);
     });
 });

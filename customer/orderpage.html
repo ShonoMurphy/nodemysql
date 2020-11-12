@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        //The all caps words are replaced by order data by the server
+        var CustomerName = '$CUSTOMERNAME'
+        var CustomerMail = '$CUSTOMERMAIL'
+        var CustomerAddress = '$CUSTOMERADDRESS'
+        var OrderNumber = $ORDERNUMBER
+        var OrderDate = new Date('$ORDERDATE').toLocaleDateString()
+        var OrderID = '$ORDERID'
+
+        function PageOnload() {
+            //Set all the order data
+            document.getElementById("CustName").innerText = `Customer name: ${CustomerName}`;
+            document.getElementById("CustMail").innerText = `Customer mail: ${CustomerMail}`;
+            document.getElementById("CustAddr").innerText = `Customer address: ${CustomerAddress}`;
+            document.getElementById("NewPOrderID").value = OrderID;
+            document.getElementById("OrdNum").innerText = `Order Number: ${OrderNumber}`;
+            document.getElementById("OrdDate").innerText = `Order Date: ${OrderDate}`;
+
+            //Get all the order items from the server
+            $.ajax({
+                type: 'GET',
+                url: `http://${window.location.host}/get/orderitem/${OrderID}`,
+                success: function(result) {
+
+                    //Take each order item and make a row of each one with some data of them
+                    var productrows = '';
+                    result.forEach(p=> {
+                        productrows += `<tr>
+                                    <td>${p.product_name}</td>
+                                    <td>${p.quantity}</td>
+                                    <td><input type="button" value="Remove" onclick="deleteItem(${p.orderitemID})"></td>
+                                    </tr>` 
+                    });
+
+                    //Remove the 'Fetching...' text.
+                    document.getElementById("ItemFetch").hidden = true;
+                    //Show the table and add the order item rows to it
+                    var cont = document.getElementById("OrderItemContainer");
+                    cont.removeAttribute("hidden"); 
+                    cont.innerHTML += productrows;
+                }
+            });
+        }
+
+        function ShowProducts() {
+            //Get all the products from the server
+            $.ajax({
+                type: 'GET',
+                url: `http://${window.location.host}/get/product`,
+                success: function(result) {
+
+                    //Take each product and make an <option> element for each one
+                    var productrows = '';
+                    result.forEach(p=> {
+                        productrows += `<option value=${p.product_name}>${p.product_name}</option>` 
+                    });
+
+                    //show the form, hide the button
+                    document.getElementById("AddItemForm").hidden = false;
+                    document.getElementById("AddItemForm").action = `http://${window.location.host}/customer/addorderitem`
+                    document.getElementById("ShowProd").hidden = true;
+
+                    //add the products to the selection box
+                    var cont = document.getElementById("ProductList");
+                    cont.innerHTML += productrows;
+                }
+            });
+        }
+
+        function deleteItem(id)
+        {
+            $.ajax({
+                type: 'DELETE',
+                url: `http://${window.location.host}/customer/deleteorderitem/${id}`,
+                success: function(result) {
+                    location.reload(true);
+                }
+            });
+        }
+
+    </script>
+
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body onload="PageOnload()">
+    <a href="index">Go back</a>
+    <br>
+    <br>
+    <txt id="CustName"></txt>
+    <br>
+    <txt id="CustMail"></txt>
+    <br>
+    <txt id="CustAddr"></txt>
+    <br>
+    <txt id="OrdNum"></txt>
+    <br>
+    <txt id="OrdDate"></txt>
+    <hr>
+
+    <txt id="ItemFetch">Fetching order items...</txt>
+    <table hidden style="width: 50%;" id="OrderItemContainer">
+        <tr>
+            <th>Product name</th>
+            <th>Product quantity</th>
+            <th></th>
+        </tr>
+    </table>
+    <hr>
+    <input id="ShowProd" type="button" value="Add product" onclick="ShowProducts()">
+    <form method="POST" id="AddItemForm" hidden>
+        <label for="product">Product</label>
+        <select name="product" id="ProductList">
+
+        </select>
+        <br>
+        <label for="quantity">Quantity</label>
+        <input type="number" name="quantity">
+        <br>
+        <input type="hidden" name="orderid" id="NewPOrderID" value="">
+        <input type="submit" value="Add product"">
+    </form>
+
+</body>
+
+</html>
