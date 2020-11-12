@@ -42,6 +42,13 @@ app.get('/createdb', (req, res) => {
     });
 });
 
+app.get('get/recipes', (req, res) => {
+    let sql = 'SELECT * FROM recipes'
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
 
 
 app.get('/', (req, res) => {
