@@ -105,12 +105,13 @@ app.get('/createcolorstable', (req, res) => {
 });
 
 
-app.get('/recipes/:id?', (req, res) => {
-    let sql = 'SELECT * FROM recipes';
+app.get('/get/recipes/:id?', (req, res) => {
+    let sql = `SELECT id, recipe_name, prep_time, portion_size FROM recipes`;
     let id = Number(req.params.id);
     
-    if (id != null && id != undefined && id != "" && !isNaN(id) && id >= 0)
-        sql += ` WHERE id = ${req.params.id}`;
+    if (id != null && id != undefined && id != "" && !isNaN(id) && id >= 0) {
+        sql = `SELECT * FROM recipes WHERE id = ${req.params.id}`;
+    }
 
     db.query(sql, (err, result) => {
         if (err) { catchException(err, req, res); return; }
@@ -118,7 +119,7 @@ app.get('/recipes/:id?', (req, res) => {
     });
 });
 
-app.post('/recipes/', (req, res) => {
+app.post('/post/recipes/', (req, res) => {
     let rname = "";
     let rpreptime = "";
     let rportsize = "";
