@@ -1,6 +1,7 @@
 const app = require('../app.js').app;
 const db = require('../app.js').db;
 const fs = require('fs');
+const catchException = require('../app.js').catchException;
 const { send } = require('process');
 
 module.exports = {customer};
@@ -38,7 +39,7 @@ function customer()
 
         let sql = `INSERT INTO customer (customer_name, email, address) VALUES ('${iname}', '${iemail}', '${iadress}')`;
         db.query(sql, (err, result) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             res.send(`Success! ${iname} has been added to the userlist.`)
         });
     });
@@ -48,11 +49,11 @@ function customer()
         let sql = `SELECT * FROM customer`;
         db.query(sql, (err, result) =>
         {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             
             fs.readFile(__dirname + '/neworder.html', 'utf-8', (err, data) => 
             {
-                if (err) throw err;
+                if (err) { catchException(err, req, res); return; }
                 
                 var options = "";
                 result.forEach(customer => {
@@ -80,7 +81,7 @@ function customer()
             //Error handling in case the user entered an id that is already there
             if(err) {
                 if (err.sqlMessage.includes('Duplicate entry')) res.send(`Duplicate entry '${iid}' for order number.`);
-                else res.send('Error') //if it was an unrelated error, send a generic result instead
+                else catchException(err, req, res);
                 return;
             }
 
@@ -108,11 +109,11 @@ function customer()
                     WHERE o.orderID = ${id}`;
 
         db.query(sql, (err, result) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
 
             fs.readFile(__dirname + '/orderpage.html', 'utf-8', (err, data) => 
             {
-                if (err) throw err;
+                if (err) { catchException(err, req, res); return; }
                 order = result[0]; //we should only get one result because id is unique, but we still get the sql result in an array
 
                 //Replace some values in the page's javascript
@@ -143,7 +144,7 @@ function customer()
                    INNER JOIN product p ON o.productID=p.productID
                    WHERE o.orderID = ${id}`
         db.query(sql, (err, result) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             res.send(result);
         });
     });
@@ -152,7 +153,7 @@ function customer()
     app.get('get/product', (req, res) => {
         let sql = 'SELECT * FROM product'
         db.query(sql, (err, result) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             res.send(result);
         });
     });
@@ -168,7 +169,7 @@ function customer()
                    VALUES (${orderid}, (SELECT productID FROM product WHERE product_name='${product}'), ${quantity})`;
         
         db.query(sql, (err, result) => {
-            if(err) throw err
+            if (err) { catchException(err, req, res); return; }
             res.redirect(`/customer/order/${orderid}`)
         })
     });
@@ -179,7 +180,7 @@ function customer()
 
         let sql = `DELETE FROM order_item WHERE order_item.orderitemID = ${id}`
         db.query(sql, (err, result) => {
-            if(err) throw err
+            if (err) { catchException(err, req, res); return; }
             res.sendStatus(200);
         })
     })
@@ -215,7 +216,7 @@ function customer()
 
         let sql = `INSERT INTO product (product_name, sku, unit_price) VALUES ('${iname}', '${isku}', '${iprice}')`;
         db.query(sql, (err, result) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             res.send(`Success! ${iname} has been added to the product list.`)
         });
     });
@@ -238,7 +239,7 @@ app.put('/put/customer/:id/', (req, res) => {
     let newAddress = req.headers["address"];
     let sql = `UPDATE customer SET customer_name = '${newName}', email = '${newEmail}', address = '${newAddress}'  WHERE customerID = ${req.params.id}`;
     let query = db.query(sql, (err, results) => {
-        if(err) throw err;
+        if (err) { catchException(err, req, res); return; }
         console.log('Post updated...');
     });
 });

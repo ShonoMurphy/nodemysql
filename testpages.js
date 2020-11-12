@@ -1,5 +1,6 @@
 const app = require('./app.js').app;
 const db = require('./app.js').db;
+const catchException = require('./app.js').catchException;
 
 function testpages() {
 
@@ -41,7 +42,7 @@ function testpages() {
     app.get('/createpoststable', (req, res) => {
         let sql = 'CREATE TABLE posts(id int AUTO_INCREMENT, title VARCHAR(255), body VARCHAR(255), PRIMARY KEY(id))';
         db.query(sql, (err, result) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             console.log(result);
             res.send('Posts table created...');
         });
@@ -52,7 +53,7 @@ function testpages() {
         let post = { title: 'Post One', body: 'This is post number one' };
         let sql = 'INSERT INTO posts SET ?';
         let query = db.query(sql, post, (err, result) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             console.log(result);
             res.send('Post 1 added...');
         });
@@ -63,7 +64,7 @@ function testpages() {
         let post = { title: 'Post Two', body: 'This is post number two' };
         let sql = 'INSERT INTO posts SET ?';
         let query = db.query(sql, post, (err, result) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             console.log(result);
             res.send('Post 2 added...');
         });
@@ -76,7 +77,7 @@ function testpages() {
         let post = { title: qtitle, body: qbody };
         let sql = "INSERT INTO posts SET ?";
         let query = db.query(sql, post, (err, result) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             console.log(result);
             res.send(`Post '${qtitle}' added...`);
         });
@@ -88,7 +89,7 @@ function testpages() {
     app.get('/get/:table', (req, res) => {
         let sql = `SELECT * FROM ${req.params.table}`;
         let query = db.query(sql, (err, results) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             res.send(results);
         });
     });
@@ -97,7 +98,7 @@ function testpages() {
     app.get('/get/:table/:id', (req, res) => {
         let sql = `SELECT * FROM ${req.params.table} WHERE ${req.params.table}id = ${req.params.id}`;
         let query = db.query(sql, (err, result) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             res.send(result);
         });
     });
@@ -107,7 +108,7 @@ function testpages() {
     app.get('/getposts', (req, res) => {
         let sql = 'SELECT * FROM posts';
         let query = db.query(sql, (err, results) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             console.log(results);
             res.send('Posts fetched');
         });
@@ -117,7 +118,7 @@ function testpages() {
     app.get('/getpost/:id', (req, res) => {
         let sql = `SELECT * FROM posts WHERE id = ${req.params.id}`;
         let query = db.query(sql, (err, results) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             res.send(results);
         });
     });
@@ -127,7 +128,7 @@ function testpages() {
         let newTitle = 'Updated Title';
         let sql = `UPDATE posts SET title = '${newTitle}'  WHERE id = ${req.params.id}`;
         let query = db.query(sql, (err, results) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             res.send('Post updated...');
         });
     });
@@ -136,7 +137,7 @@ function testpages() {
     app.get('/deletepost/:id/', (req, res) => {
         let sql = `DELETE FROM posts WHERE id = ${req.params.id}`;
         let query = db.query(sql, (err, results) => {
-            if (err) throw err;
+            if (err) { catchException(err, req, res); return; }
             res.send('Post deleted...');
         });
     });
