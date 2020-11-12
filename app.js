@@ -108,13 +108,16 @@ app.get('/createcolorstable', (req, res) => {
 app.get('/get/recipes/:id?', (req, res) => {
     let sql = `SELECT id, recipe_name, prep_time, portion_size FROM recipes`;
     let id = Number(req.params.id);
+    let idgiven;
     
     if (id != null && id != undefined && id != "" && !isNaN(id) && id >= 0) {
         sql = `SELECT * FROM recipes WHERE id = ${req.params.id}`;
+        idgiven = true;
     }
 
     db.query(sql, (err, result) => {
         if (err) { catchException(err, req, res); return; }
+        if (idgiven) { res.send(result[0]); return; }
         res.send(result);
     });
 });
