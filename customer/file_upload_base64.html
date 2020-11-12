@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function convertToBase64() {
+            var file = document.querySelector('#fileselect').files[0];
+            var reader = new FileReader();
+            reader.readAsDataURL(file); 
+            reader.onload = function() {
+                document.querySelector('#resultdiv').innerHTML = '<img class="image" src="' + reader.result + '">';
+                console.log(reader.result.length);
+            }
+            var baselength = reader.result.length;
+            console.log(reader.result);
+            reader.onerror = function (error) {
+                    console.log('Error: ', error);
+            }
+        }
+    </script>
+    <style>
+        .image {
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="fileselect" >
+    <button onclick="convertToBase64()">Convert to Base 64</button>
+    <div id="resultdiv">
+        <br>
+        <img src="" alt="">
+    </div>
+</body>
+</html>
