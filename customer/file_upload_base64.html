@@ -11,6 +11,7 @@
             reader.readAsDataURL(file); 
             reader.onload = function() {
                 document.querySelector('#resultdiv').innerHTML = '<img class="image" src="' + reader.result + '">';
+                console.log(reader.result);
                 console.log(reader.result.length);
             }
             var baselength = reader.result.length;
