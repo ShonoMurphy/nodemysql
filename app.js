@@ -137,7 +137,10 @@ app.post('/recipes/', (req, res) => {
     }
     else { res.sendStatus(400); return;}
 
-    let sql = `INSERT INTO recipes (recipe_name, prep_time, portion_size) VALUES ('${rname}', ${rpreptime}, '${rportsize}')`
+    preptime = Number(rpreptime);
+    if (isNaN(preptime) || preptime <= 0 || rname.includes("')") || rportsize.includes("')")) { res.sendStatus(400); return }
+
+    let sql = `INSERT INTO recipes (recipe_name, prep_time, portion_size) VALUES ('${rname}', '${rpreptime}', '${rportsize}')`
     db.query(sql, (err, result) => {
         if (err) { catchException(err, req, res); return; }
         res.sendStatus(200);
