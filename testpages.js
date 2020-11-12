@@ -93,7 +93,7 @@ function testpages() {
         });
     });
 
-    // Select single post
+    /* Select single post
     app.get('/get/:table/:id', (req, res) => {
         let sql = `SELECT * FROM ${req.params.table} WHERE ${req.params.table}id = ${req.params.id}`;
         let query = db.query(sql, (err, result) => {
@@ -101,6 +101,7 @@ function testpages() {
             res.send(result);
         });
     });
+    */
 
 
     // Select posts
