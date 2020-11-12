@@ -61,6 +61,14 @@ app.get('get/recipes', (req, res) => {
     });
 });
 
+app.get('/get/recipes/:id', (req, res) => {
+    let sql = `SELECT * FROM recipes WHERE id = ${req.params.id}`;
+    console.log(req.params.id)
+    let query = db.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
 
 app.get('/', (req, res) => {
     res.redirect("/index");
