@@ -35,6 +35,9 @@ var bodyparser = require('body-parser');
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
+//package so people can request our apis without hell
+var cors = require('cors');
+
 module.exports = { app, db, catchException}
 
 const customer = require('./customer/customer.js').customer;
@@ -67,7 +70,7 @@ app.get('/colorpage/', (req, res) => {
 });
 
 //color api
-app.get('/colors/:name?', (req, res) => {
+app.get('/colors/:name?', cors(), (req, res) => {
     //get all the colors from the db
     let sql = 'SELECT * FROM colors'
     db.query(sql, (err, result) => {
@@ -105,7 +108,7 @@ app.get('/createcolorstable', (req, res) => {
 });
 
 
-app.get('/get/recipes/:id?', (req, res) => {
+app.get('/get/recipes/:id?', cors(), (req, res) => {
     let sql = `SELECT id, recipe_name, prep_time, portion_size FROM recipes`;
     let id = Number(req.params.id);
     
@@ -119,7 +122,7 @@ app.get('/get/recipes/:id?', (req, res) => {
     });
 });
 
-app.post('/post/recipes/', (req, res) => {
+app.post('/post/recipes/', cors(), (req, res) => {
     let rname = "";
     let rpreptime = "";
     let rportsize = "";
