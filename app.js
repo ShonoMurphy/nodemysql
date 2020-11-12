@@ -17,6 +17,17 @@ db.connect((err) => {
     console.log('MySql Connected...')
 });
 
+process.on('uncaughtException', err => {
+    console.error('There was an uncaught error, aaaaa =(:', err)
+    process.exit(1) //mandatory (as per the Node.js docs)
+});
+
+function catchException(error, req, res)
+{
+    console.error('error caught: ', error);
+    res.send('An error has occurred :(');
+}
+
 const app = express();
 
 //middleware for parsing http requests
@@ -24,7 +35,7 @@ var bodyparser = require('body-parser');
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
-module.exports = { app, db }
+module.exports = { app, db, catchException}
 
 const customer = require('./customer/customer.js').customer;
 customer();
@@ -36,7 +47,7 @@ testpages();
 app.get('/createdb', (req, res) => {
     let sql = 'CREATE DATABASE felixdb';
     db.query(sql, (err, result) => {
-        if(err) throw err;
+        if (err) { catchException(err, req, res); return; }
         console.log(result);
         res.send('database created...');
     });
@@ -62,7 +73,7 @@ app.get('/colors/:name?', (req, res) => {
     //get all the colors from the db
     let sql = 'SELECT * FROM colors'
     db.query(sql, (err, result) => {
-        if (err) throw err;
+        if (err) { catchException(err, req, res); return; }
         
         //if the user entered a color name
         if (req.params.name)
@@ -89,7 +100,7 @@ app.get('/colors/:name?', (req, res) => {
 app.get('/createcolorstable', (req, res) => {
     let sql = 'CREATE TABLE colors(name VARCHAR(50), rgb VARCHAR(50), hsv VARCHAR(50), hex VARCHAR(12))';
     db.query(sql, (err, result) => {
-        if (err) throw err;
+        if (err) { catchException(err, req, res); return; }
         console.log(result);
         res.send('Color table created...');
     });
