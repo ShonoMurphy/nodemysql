@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        #chatbox {
+            width: 50%;
+            height: 500px;
+            border: black 1px solid;
+        }
+
+        #chatbox p {
+            margin: 1px 0px 1px 5px;
+            word-wrap: break-word;
+        }
+
+        * {
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+    </style>
+
+    <script>
+        var ws;
+        var user = {'name': 'empty', 'color': 'black'}
+
+        function connect() {
+            ws = new WebSocket(`ws://${window.location.hostname}:8080`);
+
+            user.name = document.getElementById('namebox').value;
+            user.color = document.getElementById("colorselect").value;
+
+            //if the connection was successful
+            ws.onopen = function () {
+                document.getElementById('div1').hidden = true;
+                document.getElementById('div2').hidden = false;
+            };
+
+            //if client recieved a message
+            ws.onmessage = function (msg) {
+                res = JSON.parse(msg.data);
+                
+                var namecontainer = document.createElement('b');
+                namecontainer.style.color = res.user.color;
+                namecontainer.innerText = res.user.name;
+
+                var messagecontainer = document.createElement('p');
+
+                var messagenode = document.createTextNode(': ' + res.message);
+
+                messagecontainer.appendChild(namecontainer);
+                messagecontainer.appendChild(messagenode);
+
+                document.getElementById('chatbox').appendChild(messagecontainer)//`<p><b style="color:${res.user.color}">${res.user.name}</b>: ${res.message}</p>`;
+            };
+        }
+
+
+        function sendmessage() {
+            let message = document.getElementById('messagebox').value;
+            let test = JSON.stringify({message, user});
+            ws.send(test);
+        }
+    </script>
+</head>
+
+<body>
+    <div id="chatbox"></div>
+    <br>
+    <div id="div1">
+        <label id="colorselectlabel" for="col">Select a color</label>
+        <input id="colorselect" name="col" type="color">
+        <input id="namebox" type="text" maxlength="30" placeholder="Insert a name..." autofocus>
+        <input id="connectbutton" type="button" value="Connect" onclick="connect()">
+    </div>
+    <div id="div2" hidden>
+        <input id="messagebox" type="text" maxlength="2000" placeholder="Type a message..." autocomplete="off">
+        <input id="sendbutton" type="button" value="Send" onclick="sendmessage()">
+    </div>
+</body>
+
+</html>

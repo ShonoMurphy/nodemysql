@@ -1,5 +1,6 @@
 const express = require('express');
 const mysql = require('mysql');
+const WebSocket = require('ws');
 
 // Create connection
 const db = mysql.createConnection({
@@ -38,6 +39,39 @@ app.use(bodyparser.urlencoded({ extended: true }));
 //package so people can request our apis without hell
 var cors = require('cors');
 
+
+const server = new WebSocket.Server({
+    port: 8080
+});
+
+let sockets = [];
+server.on('connection', function(socket) {
+    sockets.push(socket);
+
+    socket.on('message', function(msg) {
+        sockets.forEach(s => s.send(msg));
+    });
+
+    socket.on('close', function() {
+        sockets = sockets.filter(s => s !== socket);
+    });
+});
+
+/*Client test
+let clients = [
+    new WebSocket('ws://localhost:8080'),
+    new WebSocket('ws://localhost:8080')
+];
+
+clients.map(client => {
+    client.on('message', msg => console.log(msg));
+});
+async function test () {
+await new Promise(resolve => clients[0].once('open', resolve))
+clients[0].send('Test');
+}
+test();*/
+
 module.exports = { app, db, catchException}
 
 const customer = require('./customer/customer.js').customer;
@@ -64,6 +98,9 @@ app.get('/index', (req, res) => {
     res.sendFile(__dirname + "/index.html")
 });
 
+app.get('/chat/', (req, res) => {
+    res.sendFile(__dirname + "/chat.html");
+});
 
 app.get('/colorpage/', (req, res) => {
     res.sendFile(__dirname + "/Colors.html");
