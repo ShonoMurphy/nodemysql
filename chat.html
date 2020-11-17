@@ -7,10 +7,18 @@
     <title>Document</title>
 
     <style>
+        #chatbox, #div1, #div2 {
+            margin: 0 auto 0 auto;
+            text-align: center;
+        }
+
         #chatbox {
-            width: 50%;
+            width: 40%;
             height: 500px;
-            border: black 1px solid;
+            border: #0560bb 10px solid;
+            border-radius: 15px;
+            overflow: auto;
+            background-color: cornsilk;
         }
 
         #chatbox p {
@@ -18,8 +26,24 @@
             word-wrap: break-word;
         }
 
+        input[type=button] {
+            background-color:  #0560bb;
+            border: none;
+            font-size: 15px;
+            border-radius: 10px;
+        }
+
+        input {
+            background-color: cornsilk;
+        }
+
+        label {
+            color: cornsilk;
+        }
+
         * {
             font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-color: rgb(44, 41, 65);
         }
     </style>
 
