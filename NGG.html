@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number guessing game</title>
+    <style>
+        .container{
+            text-align: center;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto 0 auto;
+            border: 2px;
+            border-style: solid;
+        }
+    </style>
+</head>
+<body onload="bijLaden()">
+    
+    <div class="container">
+        <br>
+        <section id="nameSection">
+            <input type="text" id="naamveld" placeholder="voer je naam in">
+            <input type="button" value="gebruik" id="gebruikknop" onclick="naamknop()">
+        </section>
+        <div hidden id="speelnaam"></div>
+        <p>Kies een nummer van 1 tot 6. <br> Klik op de knop en kijk of je het goed hebt geraden. <br> Je hebt 3 pogingen. <br> Een geraden nummer levert je 10 credit op terwijl 3 foute pogingen je 10 credit kosten</p>
+        <div id="credit"></div>
+        <br>
+        <input type="number" value="1" id="invoerveld" min="1" max="6">
+        <input type="button" value="Check" onclick="check()">
+        <br>
+        <div id="uitslag"></div>
+        <div id="telcounter"></div>
+        <div>
+            <h3>Previous score</h3>
+            <div id="hsName">.</div>
+            <div id="hsCredit">.</div>
+        </div>
+    </div>
+
+    <script>
+
+        var rNumber = 0;
+        var counter = 0;
+        var credit = 100;
+
+        function nummertje() {
+            rNumber = Math.floor(Math.random() * 6) + 1;
+            document.querySelector('#credit').innerHTML = `Credit: ${credit}`;
+            counter = 0;
+        }
+
+        let opslagnaam = "";
+
+        function naamknop() {
+            let gebruikersnaam = document.querySelector('#naamveld').value;
+            opslagnaam = gebruikersnaam;
+            let verbergen = document.querySelector('#nameSection');
+            verbergen.hidden = true;
+            let speelNaam = document.querySelector('#speelnaam');
+            speelNaam.hidden = false;
+            document.querySelector('#speelnaam').innerHTML = `Je speelt als: ${gebruikersnaam}`;
+        }
+
+        function check() {
+            let keuze = document.querySelector('#invoerveld').value
+            console.log(rNumber);
+            counter++;
+            if( keuze == rNumber ){
+                document.querySelector('#uitslag').innerHTML = `Je hebt het getal in ${counter}x geraden! Dit heeft je 10 credits opgeleverd. <br> Er staat een nieuw nummertje klaar om geraden te worden.`;
+                credit+=10;
+                document.querySelector('#credit').innerHTML = `Credits: ${credit}`;
+                opslaan();
+                nummertje();
+            }else{
+                document.querySelector('#uitslag').innerHTML = `Je gekozen nummer ${keuze} is niet goed, kies een ander getal`;                
+            }
+            document.querySelector('#telcounter').innerHTML = `Counter: ${counter}`;
+            if( counter == 3){
+                document.querySelector('#uitslag').innerHTML = `Helaas heb je 3x fout geraden. Dit heeft je 10 credits gekost. <br> Er staat een nieuw nummertje klaar om geraden te worden.`;                               
+                credit-=10;
+                document.querySelector('#credit').innerHTML = `Credit: ${credit}`;
+                opslaan();
+                nummertje();
+            }
+        }
+
+        function opslaan() {
+            if (typeof(Storage) !== "undefined") {
+            // Store
+            localStorage.setItem("playername", `${opslagnaam}`);
+            localStorage.setItem("creditscore", `${credit}`);
+            }
+        }
+
+        function bijLaden() {
+            if(localStorage.getItem("playername")){
+                opslagnaam = localStorage.getItem("playername");
+                opslagcredit = localStorage.getItem("creditscore");
+                document.querySelector('#hsName').innerHTML = opslagnaam;
+                document.querySelector('#hsCredit').innerHTML = opslagcredit;
+            }
+            nummertje();
+        }
+
+
+        // // Check browser support
+        // if (typeof(Storage) !== "undefined") {
+        // // Store
+        // localStorage.setItem("playername", `${opslagnaam}`);
+        // localStorage.setItem("creditscore", `${credit}`);
+        // // Retrieve
+        // document.getElementById("result").innerHTML = localStorage.getItem(`playername, creditscore`);
+        // } else {
+        // document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+        // }
+
+    </script>
+</body>
+</html>
