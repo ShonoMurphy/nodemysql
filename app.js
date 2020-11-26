@@ -57,7 +57,6 @@ server.on('connection', function(socket) {
 
     socket.on('message', function(msg) {
         data = JSON.parse(msg);
-        console.log(data)
 
         if (data.mtype = 'chat') {
             let sql = `SELECT nickname, color FROM user WHERE name = '${data.user}'`;
@@ -137,8 +136,16 @@ function validateCredentials(sql, user, pass)
     })
 }
 
+
+app.get('/createchatusertable1029384756', (req, res) => {
+    let sql = 'CREATE TABLE user ( `name` VARCHAR(30) NOT NULL , `id` INT NOT NULL AUTO_INCREMENT , `password` VARCHAR(4) NOT NULL , `nickname` VARCHAR(30) NOT NULL , `color` VARCHAR(7) NOT NULL , PRIMARY KEY (`id`), UNIQUE (`name`));';
+    db.query(sql, (err, result) => {
+        if (err) {catchException(err, req, res); return};
+        res.send('User table created...');
+    });
+});
+
 app.get('/chat', (req, res) => {
-    console.log(req.cookies['user']);
     if (!req.cookies['user']) { res.redirect("/chatlogin"); return; }
     let iname = req.cookies['user']
     let ipass = req.cookies['password']
@@ -148,7 +155,6 @@ app.get('/chat', (req, res) => {
             res.cookie('user', iname, { maxAge: 900000 });//, httpOnly: true });
             res.cookie('password', ipass, { maxAge: 900000 });//, httpOnly: true });
             res.sendFile(__dirname + '/chat.html')
-            console.log('AAAAAAAAAA')
         },
         function () {
             console.log('Invalid user...YEET!')
