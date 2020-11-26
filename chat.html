@@ -157,43 +157,73 @@
                 document.getElementById('div1').hidden = true;
                 document.getElementById('div2').hidden = false;
                 document.getElementById('messagebox').focus();
+
+                
+                let mtype = 'chatjoined';
+                let msg = JSON.stringify({ user, mtype, });
+
+                ws.send(msg)
             };
 
             //if client recieved a message
             ws.onmessage = function (msg) {
                 res = JSON.parse(msg.data);
 
-                const d = new Date();
-                date = d.getHours() + ":" + d.getMinutes() + ", " + d.toDateString();
-              
-                var namecontainer = document.createElement('b');
-                namecontainer.style.color = res.user.color;
-                namecontainer.innerText = res.user.name;
+                if (res.mtype == 'chatjoined') {
+                    var namecontainer = document.createElement('b');
+                    namecontainer.style.color = res.user.color;
+                    namecontainer.innerText = res.user.name;
 
-                var creatediv = document.createElement('div');
-                creatediv.className = "chatdiv";
+                    var creatediv = document.createElement('div');
+                    creatediv.className = "chatdiv";
 
-                var messagecontainer = document.createElement('p');
-                var breaky = document.createElement('br');
-                var messagenode = document.createTextNode(res.message);
-                var datespan = document.createElement('span');
-                datespan.className = "dateformat";
-                datespan.innerText = date;
+                    var messagecontainer = document.createElement('p');
+                    var messagenode = document.createTextNode(' has joined!');
 
-                messagecontainer.appendChild(namecontainer);
-                messagecontainer.append(` - `);
-                messagecontainer.appendChild(datespan);
+                    messagecontainer.appendChild(namecontainer);
 
-                messagecontainer.appendChild(breaky);
-                messagecontainer.appendChild(messagenode);
-                creatediv.appendChild(messagecontainer);
+                    messagecontainer.appendChild(messagenode);
+                    creatediv.appendChild(messagecontainer);
 
-                document.getElementById('chatbox').appendChild(creatediv);
+                    document.getElementById('chatbox').appendChild(creatediv);
 
-                var element = document.getElementById("chatbox");
-                element.scrollTop = element.scrollHeight;
-            };
+                    var element = document.getElementById("chatbox");
+                    element.scrollTop = element.scrollHeight;
+                }
 
+                if (res.mtype == 'chat') {
+                    const d = new Date();
+                    date = d.getHours() + ":" + d.getMinutes() + ", " + d.toDateString();
+
+                    var namecontainer = document.createElement('b');
+                    namecontainer.style.color = res.user.color;
+                    namecontainer.innerText = res.user.name;
+
+                    var creatediv = document.createElement('div');
+                    creatediv.className = "chatdiv";
+
+                    var messagecontainer = document.createElement('p');
+                    var breaky = document.createElement('br');
+                    var messagenode = document.createTextNode(res.message);
+                    var datespan = document.createElement('span');
+                    datespan.className = "dateformat";
+                    datespan.innerText = date;
+
+                    messagecontainer.appendChild(namecontainer);
+                    messagecontainer.append(` - `);
+                    messagecontainer.appendChild(datespan);
+
+                    messagecontainer.appendChild(breaky);
+                    messagecontainer.appendChild(messagenode);
+                    creatediv.appendChild(messagecontainer);
+
+                    document.getElementById('chatbox').appendChild(creatediv);
+
+                    var element = document.getElementById("chatbox");
+                    element.scrollTop = element.scrollHeight;
+                }
+            }
+            
             ws.onclose = function () {
                 document.getElementById('div1').hidden = false;
                 document.getElementById('div2').hidden = true;

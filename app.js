@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const WebSocket = require('ws');
+const fs = require('fs');
 var cookieParser = require('cookie-parser')
 
 // Create connection
@@ -58,17 +59,32 @@ server.on('connection', function(socket) {
     socket.on('message', function(msg) {
         data = JSON.parse(msg);
 
-        if (data.mtype = 'chat') {
+        if (data.mtype == 'chatjoined')
+        {
             let sql = `SELECT nickname, color FROM user WHERE name = '${data.user}'`;
             db.query(sql, (err, result) => {
                 if (err) { catchException(err); return; }
-                
+                if (result[0] == undefined) { sockets.filter(s => s !== socket); return;}
+
+                let user = { 'name': result[0].nickname, 'color': result[0].color }
+                let mtype = 'chatjoined';
+
+                let reply = JSON.stringify({user, mtype})
+                sockets.forEach(s => s.send(reply));
+            });
+        }
+        
+        else if (data.mtype == 'chat') {
+            let sql = `SELECT nickname, color FROM user WHERE name = '${data.user}'`;
+            db.query(sql, (err, result) => {
+                if (err) { catchException(err); return; }
                 if (result[0] == undefined) { sockets.filter(s => s !== socket); return;}
 
                 let user = { 'name': result[0].nickname, 'color': result[0].color }
                 let message = data.message;
+                let mtype = 'chat';
                 
-                let reply = JSON.stringify({ message, user });
+                let reply = JSON.stringify({ message, user, mtype });
                 sockets.forEach(s => s.send(reply));
             });
         }
@@ -213,6 +229,74 @@ app.post('/chatregister', (req, res) => {
         res.redirect('/chat')
     });
 });
+
+app.get('/chatprofile', (req, res) => {
+    if (!req.cookies['user']) { res.redirect("/chatlogin"); return; }
+    let iname = req.cookies['user']
+    let ipass = req.cookies['password']
+
+    validateCredentials(`SELECT name, password FROM user WHERE name=?`, iname, ipass).then(
+        function () {
+            res.cookie('user', iname, { maxAge: 900000 });//, httpOnly: true });
+            res.cookie('password', ipass, { maxAge: 900000 });//, httpOnly: true });
+
+            sql = `SELECT nickname, color FROM user WHERE name =?`;
+
+            db.query(sql, [iname], (err, result) => {
+                if (err) { catchException(err, req, res); return; }
+
+                fs.readFile(__dirname + '/chatprofile.html', 'utf-8', (err, data) => {
+                    if (err) { catchException(err, req, res); return; }
+                    userdata = result[0]; //we should only get one result because id is unique, but we still get the sql result in an array
+
+                    //Replace some values in the page's javascript
+                    data = data.replace('$USERNICKNAME', userdata.nickname);
+                    data = data.replace('$USERCOLOR', userdata.color)
+
+                    //send the prepared html file
+                    res.send(data)
+                });
+            });
+        },
+        function () {
+            console.log('Invalid user...YEET!')
+            res.cookie('user', null, {maxAge: 0});
+            res.cookie('password', null, {maxAge: 0});
+            res.redirect("/chatlogin");
+        }
+    )
+});
+
+app.post('/chatprofile', (req, res) => {
+    let iname = req.cookies['user']
+    let ipass = req.cookies['password']
+    let icol = req.body["color"];
+    let inick = req.body["nickname"];
+
+    validateCredentials(`SELECT name, password FROM user WHERE name = '${iname}'`, iname, ipass).then(
+        function () {
+            res.cookie('user', iname, { maxAge: 900000 });//, httpOnly: true });
+            res.cookie('password', ipass, { maxAge: 900000 });//, httpOnly: true });
+            
+            sql1 = 'UPDATE user SET nickname=? WHERE user.name = ?;';
+            db.query(sql1, [inick, iname], (err, result1) => {
+                if (err) { catchException(err, req, res); return; }
+
+                sql2 = 'UPDATE user SET color=? WHERE user.name = ?;';
+                db.query(sql2, [icol, iname], (err, result2) => {
+                    if (err) { catchException(err, req, res); return; }
+
+                    res.redirect('/chat')
+                });
+            });
+        },
+        function () {
+            console.log('Invalid login attempt');
+            res.redirect('/chatlogin');
+        }
+    )
+});
+
 
 app.get('/colorpage/', (req, res) => {
     res.sendFile(__dirname + "/Colors.html");
