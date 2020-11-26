@@ -4,15 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <style>
+        * {
+            text-align: center;
+        }
+
+        html {
+            height: 100%;
+            font-family: 'Open Sans', sans-serif;
+            background-color: #5a4080;
+        }
+
+        .container {
+            margin: 0 auto 0 auto;
+            width: 35%;
+        }
+
+        h2 {
+            /*font-size: 40px;*/
+            color: cornsilk;
+        }
+
+        input[type=submit] {
+            height: 25px;
+            width: 70px;
+            background-color: #2c1b46;
+            color: cornsilk;
+            border: none;
+            font-size: 13px;
+            outline: none;
+        }
+
+        input {
+            background-color: cornsilk;
+            border-radius: 10px;
+            height: 20px;
+            margin-bottom: 5px;
+            padding-left: 10px;
+        }
+
+        input[type=color] {
+            padding: 0 3px 0 3px;
+        }
+
+        
+
+    </style>
 </head>
 <body>
     <form method="POST" action="chatprofile">
-        <label for="nickname">Nickname</label>
+        <h2 for="nickname">Nickname</h2>
         <input type="text" name="nickname" value="$USERNICKNAME" placeholder="Enter a nickname..." autocomplete="off">
-        <br>
-        <label for="color">Color</label>
+        <h2 for="color">Color</h2>
         <input type="color" name="color" value="$USERCOLOR" autocomplete="off">
-        <br>
+        <br><br><br>
         <input type="submit" value="Submit">
     </form>
 </body>
