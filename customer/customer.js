@@ -233,6 +233,14 @@ app.get('/customer/editcustomer', (req, res) => {
     res.sendFile(__dirname + "/editcustomer.html")
 });
 
+app.get('/get/:table', (req, res) => {
+    let sql = `SELECT * FROM ${req.params.table}`;
+    let query = db.query(sql, (err, results) => {
+        if(err) throw err;
+        res.send(results);
+    });
+});
+
 app.put('/put/customer/:id/', (req, res) => {
     let newName = req.headers["customer_name"];
     let newEmail = req.headers["email"];

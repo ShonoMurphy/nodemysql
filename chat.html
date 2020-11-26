@@ -109,7 +109,6 @@
             height: 100%;
             font-family: 'Open Sans', sans-serif;
             background-color: #5a4080;
-            /* background-image: linear-gradient(#5a4080, #3a2a52, #5a4080); */
         }
 
         @media screen and (max-width: 400px) and (min-width: 200px) {
@@ -132,7 +131,7 @@
             user.name = document.getElementById('namebox').value;
             user.color = document.getElementById("colorselect").value;
 
-            if (user.name == null || user.name == "") { return; }
+            if (user == null || user == "") { return; }
 
             //if the connection was successful
             ws.onopen = function () {
