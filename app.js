@@ -387,6 +387,10 @@ app.post('/post/recipes/', cors(), (req, res) => {
     });
 });
 
+app.get('/numberguessgame', (req, res) => {
+    res.sendFile(__dirname + "/NGG.html")
+});
+
 app.listen('3000', () => {
     console.log('Server started on port 3000');
 });
