@@ -3,23 +3,72 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
+    <title>Chat login</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <style>
+        html {
+            height: 100%;
+            font-family: 'Open Sans', sans-serif;
+            background-color: #5a4080;
+        }
+
+        .container {
+            margin: 0 auto 0 auto;
+            width: 35%;
+        }
+
+        h1 {
+            font-size: 40px;
+            color: cornsilk;
+        }
+
+        input[type=submit] {
+            height: 25px;
+            width: 70px;
+            background-color: #2c1b46;
+            color: cornsilk;
+            border: none;
+            font-size: 13px;
+            outline: none;
+        }
+
+        input {
+            background-color: cornsilk;
+            border-radius: 10px;
+            height: 20px;
+            margin-bottom: 5px;
+            padding-left: 10px;
+        }
+
+        input[type=color] {
+            padding: 0 0 0 0;
+        }
+
+        
+
+    </style>
 </head>
 <body>
-    <form method="POST" action="chatlogin">
-        <input type="text" name="username" placeholder="Enter a name...">
-        <input type="password" maxlength="4" name="password" placeholder="Enter a password...">
-        <input type="submit" value="Log in">
-    </form>
-    <hr>
-    <form method="POST" action="chatregister">
-        <input type="text" name="username" placeholder="Enter a name...">
-        <input type="password" maxlength="4" name="password" placeholder="Enter a password...">
-        <input type="color" name="color" placeholder="Enter a color...">
-        <input type="submit" value="Register">
-    </form>
+    <div class="container">
+        <div id="div1">
+            <h1>Login</h1>
+            <form method="POST" action="chatlogin">
+                <input type="text" name="username" placeholder="Enter a name...">
+                <input type="password" maxlength="4" name="password" placeholder="Enter a password...">
+                <input type="submit" value="Log in">
+            </form>
+        </div>
+        <div id="div2">
+            <h1>Register</h1>
+            <form method="POST" action="chatregister">
+                <input type="text" name="username" placeholder="Enter a name...">
+                <input type="password" maxlength="4" name="password" placeholder="Enter a password...">
+                <input type="color" name="color" placeholder="Enter a color...">
+                <input type="submit" value="Register">
+            </form>
+        </div>
+    </div>
 </body>
 </html>
