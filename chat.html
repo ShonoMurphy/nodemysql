@@ -19,19 +19,38 @@
         }
 
         * {
-            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         }
     </style>
 
     <script>
+        function getCookie(name) {
+            // Split cookie string and get all individual name=value pairs in an array
+            var cookieArr = document.cookie.split(";");
+
+            // Loop through the array elements
+            for (var i = 0; i < cookieArr.length; i++) {
+                var cookiePair = cookieArr[i].split("=");
+                
+                /* Removing whitespace at the beginning of the cookie name
+                and compare it with the given string */
+                if (name == cookiePair[0].trim()) {
+                    // Decode the cookie value and return
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+
+            return 'guest';
+        }
+
         var ws;
-        var user = {'name': 'empty', 'color': 'black'}
+        var user = getCookie('user')//{ 'name': getCookie('user')}//, 'color': 'black' }
 
         function connect() {
             ws = new WebSocket(`ws://${window.location.hostname}:8080`);
 
-            user.name = document.getElementById('namebox').value;
-            user.color = document.getElementById("colorselect").value;
+            //user.name = document.getElementById('namebox').value;
+            //user.color = document.getElementById("colorselect").value;
 
             //if the connection was successful
             ws.onopen = function () {
@@ -42,7 +61,7 @@
             //if client recieved a message
             ws.onmessage = function (msg) {
                 res = JSON.parse(msg.data);
-                
+
                 var namecontainer = document.createElement('b');
                 namecontainer.style.color = res.user.color;
                 namecontainer.innerText = res.user.name;
@@ -56,30 +75,38 @@
 
                 document.getElementById('chatbox').appendChild(messagecontainer)//`<p><b style="color:${res.user.color}">${res.user.name}</b>: ${res.message}</p>`;
             };
+
+            ws.onclose = function () {
+                document.getElementById('div1').hidden = false;
+                document.getElementById('div2').hidden = true;
+            }
         }
 
 
         function sendmessage() {
             let message = document.getElementById('messagebox').value;
-            let test = JSON.stringify({message, user});
+            let mtype = 'chat';
+            let test = JSON.stringify({ message, user, mtype, });
             ws.send(test);
         }
     </script>
 </head>
 
-<body>
+<body onload="connect()">
     <div id="chatbox"></div>
     <br>
     <div id="div1">
-        <label id="colorselectlabel" for="col">Select a color</label>
-        <input id="colorselect" name="col" type="color">
-        <input id="namebox" type="text" maxlength="30" placeholder="Insert a name..." autofocus>
+        <!--<label id="colorselectlabel" for="col">Select a color</label>-->
+        <!--<input id="colorselect" name="col" type="color">-->
+        <!--<input id="namebox" type="text" maxlength="30" placeholder="Insert a name..." autofocus>-->
         <input id="connectbutton" type="button" value="Connect" onclick="connect()">
     </div>
     <div id="div2" hidden>
         <input id="messagebox" type="text" maxlength="2000" placeholder="Type a message..." autocomplete="off">
         <input id="sendbutton" type="button" value="Send" onclick="sendmessage()">
     </div>
+    <a href="/chatprofile"></a>
+    <a href="/chatlogout">Log out</a>
 </body>
 
 </html>
