@@ -223,6 +223,11 @@
                     element.scrollTop = element.scrollHeight;
                 }
             }
+            
+            ws.onclose = function () {
+                document.getElementById('div1').hidden = false;
+                document.getElementById('div2').hidden = true;
+            }
         }
 
 
